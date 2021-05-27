@@ -4,22 +4,51 @@ import { apiGet } from '../misc/config'
 
 const Show = () => {
 
-const {id} = useParams();
-const [show, setShow] = useState(null);
+    const {id} = useParams();
+    const [show, setShow] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-useEffect( () => {
-    apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`).then( (results) =>{
-        setShow(results);
-    } )
-}, [id] )
+    useEffect( () => {
 
-console.log('show', show);
-    return (
-        <div>
-            
-           {id}
+        let isMounted = true;
+
+        apiGet(`/shows/${id}?embed[]=seasons&embed[]=cast`).then( (results) =>{
+
+            if(isMounted){
+            setShow(results);
+            setIsLoading(false);
+            }
+        } ).catch( err => {
+            if(isMounted){
+                setError(err);
+                setIsLoading(false);
+            }
+        });
+
+        return ( () => {
+            isMounted = false;
+        } )
+    }, [id] )
+
+     console.log('show', show);
+
+    if(isLoading){
+        return <div>Div is loading</div>
+    }
+
+    if(error){
+        return <div>
+            {error}
         </div>
-    )
-}
+    }
+
+
+        return (
+            <div>
+                {id}
+            </div>
+        )
+    }
 
 export default Show
