@@ -8,8 +8,6 @@ const ShowGrid = ({data}) => {
 
     const [starredShows, dispatchStarred] = useShows();
 
-   
-
     return (
         <FlexGrid>
             {

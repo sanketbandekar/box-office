@@ -17,9 +17,9 @@ function showsReducer(prevState, action){
 function usePersistedReducer(reducer, initialState, key) {
 
     const [state, dispatch] = useReducer(reducer, initialState, (initial) => {
-        const persisted = localStorage.getItem(key);
 
-        return persisted ? JSON.parse(persisted): initial
+        const persisted = localStorage.getItem(key);
+        return persisted ? JSON.parse(persisted) : initial
     })
 
     useEffect( () => {
@@ -34,11 +34,14 @@ export function useShows( key = 'shows' ){
     return usePersistedReducer(showsReducer, [], key);
 }
 
+
+
+
 export function useLastQuery(key ='lastQuery'){
 
     const [input , setInput] = useState( () => {
-        const persisted = sessionStorage.getItem(key);
 
+        const persisted = sessionStorage.getItem(key);
         return persisted ? JSON.parse(persisted): "";
     } );
 
@@ -61,11 +64,12 @@ const reducer = (prevState, action) => {
             return{...prevState , isLoading:false, error : action.error}
         }
             
-            
-    
         default: return prevState;
     }
 }
+
+
+
 
 export function useShow(showId){
     const[state, dispatch] =useReducer(reducer, {
